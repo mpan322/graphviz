@@ -7,8 +7,10 @@ DeclareCategory("IsGVDigraph", IsGVObject);
 
 # Constuctors
 DeclareOperation("GV_Graph", [IsRecord]);
+DeclareOperation("GV_Graph", [IsString]);
 DeclareOperation("GV_Graph", []);
 DeclareOperation("GV_Digraph", [IsRecord]);
+DeclareOperation("GV_Digraph", [IsString]);
 DeclareOperation("GV_Digraph", []);
 
 # Getters

@@ -111,5 +111,8 @@ gap> GV_Edge(x, "LR_8", "LR_6", rec(label:="S(b)"));
 gap> GV_Edge(x, "LR_8", "LR_5", rec(label:="S(a)"));
 <graphviz digraph object with 4 nodes and 14 edges>
 
+gap> g := GV_Graph("test-name");;
+gap> GV_Name(g);
+
 #
 gap> STOP_TEST("Digraphs package: standard/oper.tst", 0);

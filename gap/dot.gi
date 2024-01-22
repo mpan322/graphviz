@@ -44,7 +44,7 @@ BindGlobal("GV_DigraphType", NewType(GV_ObjectFamily,
 # Constuctors etc
 ###############################################################################
 
-InstallMethod(GV_Graph, "for a string", [IsRecord],
+InstallMethod(GV_Graph, "for a record", [IsRecord],
 function(attrs)
   local result;
 
@@ -71,6 +71,12 @@ function(attrs)
   Add(GV_Lines(result), ["Head"]);
   return result;
 end);
+
+InstallMethod(GV_Graph, "for a string", [IsString],
+function(name)
+  return GV_Graph(rec(name := name));
+end);
+
 
 InstallMethod(GV_Graph, "for no args", [], {} -> GV_Graph(rec()));
 
@@ -100,6 +106,11 @@ function(attrs)
   fi;
   Add(GV_Lines(result), ["Head"]);
   return result;
+end);
+
+InstallMethod(GV_Digraph, "for a string", [IsString],
+function(name)
+  return GV_Digraph(rec(name := name));
 end);
 
 InstallMethod(GV_Digraph, "for no args", [], {} -> GV_Digraph(rec()));
