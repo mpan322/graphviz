@@ -11,13 +11,13 @@ gap> START_TEST("graphviz package: dot.tst");
 gap> LoadPackage("graphviz", false);;
 
 #
-gap> x := GV_Graph(rec(comment := "The round table"));
-gap> GV_Node(x, "A", "King Arthur", rec(shape := "box"));
-gap> GV_Node(x, "B", "Sir Bedevere the Wise");
-gap> GV_Node(x, "L", "Sir Lancelot the Brave");
-gap> GV_Edge(x, "A", "B");
-gap> GV_Edge(x, "A", "L");
-gap> GV_Edge(x, "B", "L", rec(constraint := false));
+gap> x := GV_Graph(rec(comment := "The round table"));;
+gap> GV_Node(x, "A", "King Arthur", rec(shape := "box"));;
+gap> GV_Node(x, "B", "Sir Bedevere the Wise");;
+gap> GV_Node(x, "L", "Sir Lancelot the Brave");;
+gap> GV_Edge(x, "A", "B");;
+gap> GV_Edge(x, "A", "L");;
+gap> GV_Edge(x, "B", "L", rec(constraint := false));;
 gap> GV_String(x);
 "//The round table\ngraph  {\n\tA [label=\"King Arthur\", shape=box]\n\tB [lab\
 el=\"Sir Bedevere the Wise\"]\n\tL [label=\"Sir Lancelot the Brave\"]\n\tA -- \

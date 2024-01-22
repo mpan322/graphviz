@@ -201,7 +201,7 @@ end);
 InstallMethod(GV_NodeAttr, "for a graphviz object and record",
 [IsGVObject, IsRecord],
 function(x, attr)
-  return GV_NodeAttr(x, attr, Length(GV_Lines(x) + 1));
+  return GV_NodeAttr(x, attr, Length(GV_Lines(x)) + 1);
 end);
 
 InstallMethod(GV_EdgeAttr, "for a graphviz object, record, and pos int",
