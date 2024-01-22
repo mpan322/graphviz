@@ -111,8 +111,13 @@ gap> GV_Edge(x, "LR_8", "LR_6", rec(label:="S(b)"));
 gap> GV_Edge(x, "LR_8", "LR_5", rec(label:="S(a)"));
 <graphviz digraph object with 4 nodes and 14 edges>
 
-#
+# Test making a graph w/ only a name
 gap> g := GV_Graph("test-name");;
+gap> GV_Name(g);
+"test-name"
+
+# Test making a digraph w/ only a name
+gap> g := GV_Digraph("test-name");;
 gap> GV_Name(g);
 "test-name"
 
