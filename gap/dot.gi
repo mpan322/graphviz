@@ -224,7 +224,7 @@ function(x, name, attrs, line_number)
 
   # remove old node if it exists
   if IsBound(nodes.(name)) then
-    lines := Compacted(Filtered(lines, info -> not (info[1] = "Node" and info[2] = name))); 
+    lines := Filtered(lines, info -> not (info[1] = "Node" and info[2] = name)); 
   fi;
   
   nodes.(name) := attrs;
@@ -257,6 +257,12 @@ InstallMethod(GV_Node, "for a graphviz object, string, string",
 [IsGVObject, IsString, IsString],
 function(x, name, label)
   return GV_Node(x, name, rec(label := label));
+end);
+
+InstallMethod(GV_Node, "for a graphviz object, string, pos-int",
+[IsGVObject, IsString, IsPosInt],
+function(x, name, line)
+  return GV_Node(x, name, rec(), line);
 end);
 
 InstallMethod(GV_Node, "for a graphviz object and string",

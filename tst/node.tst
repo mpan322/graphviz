@@ -42,4 +42,15 @@ gap> GV_Lines(g);
 gap> GV_String(g);
 "graph  {\n\ttest-node\n}\n"
 
+# Place nodes on lines in middle
+gap> g := GV_Graph();;
+gap> GV_Node(g, "test-node-t");;
+gap> GV_Node(g, "test-node-b");;
+gap> GV_Node(g, "test-node-m", 3);;
+gap> GV_Lines(g);
+[ [ "Head" ], [ "Node", "test-node-t" ], [ "Node", "test-node-m" ], 
+  [ "Node", "test-node-b" ] ]
+gap> GV_String(g);
+"graph  {\n\ttest-node-t\n\ttest-node-m\n\ttest-node-b\n}\n"
+
 #
