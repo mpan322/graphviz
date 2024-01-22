@@ -8,5 +8,9 @@
  (not needed but may be nice)
  
 
+ ## Bug
+ - Node overwritting does not work properly 
+     - creating two nodes with the same label removes a node from the nodes list but does not remove it from the output.
+
 ## Questions
 - I am going to stick with the line by line modification approach which exists, however I am not sure whether this is the nicest approach given that the user cannot easily determine the line number (partially the reason why (*) and (+) are mentioned)

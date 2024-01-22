@@ -26,6 +26,7 @@ DeclareOperation("GV_Lines", [IsGVObject]);
 # Setters
 DeclareOperation("GV_Name",
                  [IsGVObject, IsString]);
+
 DeclareOperation("GV_GraphAttr",
                  [IsGVObject, IsRecord, IsPosInt]);
 DeclareOperation("GV_GraphAttr",
@@ -38,6 +39,7 @@ DeclareOperation("GV_EdgeAttr",
                  [IsGVObject, IsRecord, IsPosInt]);
 DeclareOperation("GV_EdgeAttr",
                  [IsGVObject, IsRecord]);
+
 DeclareOperation("GV_Node",
                  [IsGVObject, IsString, IsString, IsRecord, IsPosInt]);
 DeclareOperation("GV_Node",
@@ -52,6 +54,7 @@ DeclareOperation("GV_Node",
                  [IsGVObject, IsString, IsString]);
 DeclareOperation("GV_Node",
                  [IsGVObject, IsString, IsPosInt]);
+                 
 DeclareOperation("GV_Node",
                  [IsGVObject, IsString]);
 DeclareOperation("GV_Edge",
