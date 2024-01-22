@@ -54,9 +54,9 @@ DeclareOperation("GV_Node",
                  [IsGVObject, IsString, IsString]);
 DeclareOperation("GV_Node",
                  [IsGVObject, IsString, IsPosInt]);
-                 
 DeclareOperation("GV_Node",
                  [IsGVObject, IsString]);
+
 DeclareOperation("GV_Edge",
                  [IsGVObject, IsString, IsString, IsRecord, IsPosInt]);
 DeclareOperation("GV_Edge",
@@ -65,6 +65,7 @@ DeclareOperation("GV_Edge",
                  [IsGVObject, IsString, IsString, IsPosInt]);
 DeclareOperation("GV_Edge",
                  [IsGVObject, IsString, IsString]);
+
 DeclareOperation("GV_Comment",
                  [IsGVObject, IsString, IsPosInt]);
 DeclareOperation("GV_Comment",

@@ -272,12 +272,28 @@ function(x, name)
 end);
 
 InstallMethod(GV_Edge,
+"for a graphviz object, string, string, record and posivite integer",
+[IsGVObject, IsString, IsString, IsRecord, IsPosInt],
+function(x, tail_name, head_name, attrs, line)
+  Add(GV_Edges(x), [tail_name, head_name, attrs]);
+  InsertElmList(GV_Lines(x), line, ["Edge", Length(GV_Edges(x)), tail_name, head_name]);
+  return x;
+end);
+
+InstallMethod(GV_Edge,
 "for a graphviz object, string, string, record",
 [IsGVObject, IsString, IsString, IsRecord],
 function(x, tail_name, head_name, attrs)
   Add(GV_Edges(x), [tail_name, head_name, attrs]);
-  Add(GV_Lines(x), ["Edge", Length(GV_Edges(x))]);
+  Add(GV_Lines(x), ["Edge", Length(GV_Edges(x)), tail_name, head_name]);
   return x;
+end);
+
+InstallMethod(GV_Edge,
+"for a graphviz object, string, string, record",
+[IsGVObject, IsString, IsString, IsPosInt],
+function(x, tail_name, head_name, line)
+  return GV_Edge(x, tail_name, head_name, rec(), line);
 end);
 
 InstallMethod(GV_Edge, "for a graphviz object, string, string",
