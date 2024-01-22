@@ -49,11 +49,10 @@ gap> GV_GraphAttrs(g);
 
 # Test that adding graph attributes at specific line works
 gap> g := GV_Graph("add");;
-gap> GV_EdgeAttr(g, rec(color := "red"));;
-gap> GV_EdgeAttr(g, rec(color := "green"), 2);;
-gap> GV_EdgeAttr(g, rec(color := "blue"), 4);;
+gap> GV_GraphAttr(g, rec(color := "red"));;
+gap> GV_GraphAttr(g, rec(color := "green"), 2);;
+gap> GV_GraphAttr(g, rec(color := "blue"), 4);;
 gap> GV_String(g);
-"graph add {\n\tedges  [color=green]\n\tedges  [color=red]\n\tedges  [color=bl\
-ue]\n}\n"
+"graph add {\n\tcolor=\"green\" \n\tcolor=\"red\" \n\tcolor=\"blue\" \n}\n"
 
 #
