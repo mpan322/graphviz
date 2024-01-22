@@ -1,7 +1,4 @@
 
-
-
-
 ###############################################################################
 # Private functionality
 ###############################################################################
@@ -221,7 +218,19 @@ end);
 InstallMethod(GV_Node, "for a graphviz object, string, record, pos. int.",
 [IsGVObject, IsString, IsRecord, IsPosInt],
 function(x, name, attrs, line_number)
-  GV_Nodes(x).(name) := attrs;
+  local nodes, lines;
+  nodes := GV_Nodes(x);
+  lines := GV_Lines(x);
+
+  # remove old node if it exists
+  if IsBound(nodes.(name)) then
+    x!.Lines := Compacted(Filtered(lines, info -> not (info[1] = "Node" and info[2] = name))); 
+    if line_number = Length(lines) + 1 then
+      line_number := line_number - 1;
+    fi;
+  fi;
+  
+  nodes.(name) := attrs;
   InsertElmList(GV_Lines(x), line_number, ["Node", name]);
   return x;
 end);

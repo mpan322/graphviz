@@ -29,4 +29,15 @@ gap> GV_Node(g, "test-node");;
 gap> GV_Node(g, "test-node", rec(color := "red"));;
 gap> GV_Nodes(g);
 rec( ("test-node") := rec( color := "red" ) )
+gap> GV_Lines(g);
+[ [ "Head" ], [ "Node", "test-node" ] ]
 gap> GV_String(g);
+"graph  {\n\ttest-node [color=red]\n}\n"
+
+# Place nodes on lines which are larger than the number of lines
+gap> g := GV_Graph();;
+gap> GV_Node(g, "test-node", rec(), 10);
+gap> GV_Lines(g);
+gap> GV_String(g);
+
+#
