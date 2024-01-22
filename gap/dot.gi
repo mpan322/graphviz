@@ -224,14 +224,12 @@ function(x, name, attrs, line_number)
 
   # remove old node if it exists
   if IsBound(nodes.(name)) then
-    x!.Lines := Compacted(Filtered(lines, info -> not (info[1] = "Node" and info[2] = name))); 
-    if line_number = Length(lines) + 1 then
-      line_number := line_number - 1;
-    fi;
+    lines := Compacted(Filtered(lines, info -> not (info[1] = "Node" and info[2] = name))); 
   fi;
   
   nodes.(name) := attrs;
-  InsertElmList(GV_Lines(x), line_number, ["Node", name]);
+  InsertElmList(lines, line_number, ["Node", name]);
+  x!.Lines := Compacted(lines);
   return x;
 end);
 

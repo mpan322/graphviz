@@ -36,8 +36,10 @@ gap> GV_String(g);
 
 # Place nodes on lines which are larger than the number of lines
 gap> g := GV_Graph();;
-gap> GV_Node(g, "test-node", rec(), 10);
+gap> GV_Node(g, "test-node", rec(), 10);;
 gap> GV_Lines(g);
+[ [ "Head" ], [ "Node", "test-node" ] ]
 gap> GV_String(g);
+"graph  {\n\ttest-node\n}\n"
 
 #
