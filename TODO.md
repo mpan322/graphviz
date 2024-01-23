@@ -7,8 +7,11 @@
  (not needed but may be nice)
  - Implement loading from a file
 
- ## Bug
- - Make sure no holes related problems when generating the output string.
+## Issues
+ - Not super happy with the current subgraph implementation, its a bit wonky but does work.
+
+## Bug
+- Make sure no holes related problems when generating the output string.
 
 ## Questions
 - I am going to stick with the line by line modification approach which exists, however I am not sure whether this is the nicest approach given that the user cannot easily determine the line number (partially the reason why (*) and (+) are mentioned)

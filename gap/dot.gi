@@ -13,6 +13,8 @@ DeclareOperation("GV_StringifyPlainSubgraph", [IsString]);
 DeclareOperation("GV_StringifyNode", [IsString, IsRecord]);
 DeclareOperation("GV_StringifyGraphAttrs", [IsRecord]);
 DeclareOperation("GV_StringifyNodeEdgeAttrs", [IsRecord]);
+DeclareOperation("GV_StringifySubgraphBegin", [IsString]);
+DeclareOperation("GV_StringifySubgraphEnd", []);
 
 BindGlobal("GV_Head",
 function(x)
@@ -393,8 +395,6 @@ function(x, list, type, idx)
   Remove(list, idx);
 end);
 
-
-
 InstallMethod(GV_Remove, "for a graphviz object and a pos int",
 [IsGVObject, IsPosInt],
 function(x, line_number)
@@ -428,6 +428,19 @@ InstallMethod(GV_StringifyComment, "for a string", [IsString],
 function(line)
   return StringFormatted("//{}\n", line);
 end);
+
+#@ Return DOT subgraph start line.
+InstallMethod(GV_StringifySubgraphBegin, "for a string", [IsString],
+function(name)
+  return StringFormatted("\tsubgraph {} {{\n", name);
+end);
+
+#@ Return DOT subgraph end line.
+InstallMethod(GV_StringifySubgraphEnd, "for a string", [],
+function()
+  return StringFormatted("\t}}\n");
+end);
+
 
 #@ Return DOT graph head line.
 InstallMethod(GV_StringifyGraphHead, "for a string", [IsString],
@@ -540,10 +553,43 @@ function(attrs)
   return result;
 end);
 
+DeclareOperation("GV_ValidateSubgraphs", [IsGVObject]);
+InstallMethod(GV_ValidateSubgraphs, "validate graphviz subgraphs",
+[IsGVObject],
+function(x)
+  local depth, lineIdx, line, lines;
+
+  lineIdx := 0;
+  depth := 0;
+  lines := GV_Lines(x);
+  for lineIdx in [1..Length(lines)] do
+    line := lines[lineIdx];
+
+    if line[1] = "SubBegin" then
+      depth := depth + 1;
+    elif line[1] = "SubEnd" then
+      depth := depth - 1;
+    fi;
+
+    if depth < 0 then
+      return [depth, lineIdx];
+    fi;
+  od;
+
+  return [depth, lineIdx];
+end);
+
 InstallMethod(GV_String, "for a graphviz object",
 [IsGVObject],
 function(x)
-  local result, line, i;
+  local result, info, line, i;
+
+  info := GV_ValidateSubgraphs(x);
+  if info[1] < 0 then
+    return StringFormatted("Failed to output - Too many ending brackets. Line: {}\n", info[2]);
+  elif info[1] > 0 then 
+    return "Failed to output - Too few ending brackets\n";
+  fi;
 
   result := "";
   for i in [1 .. Length(GV_Lines(x))] do
@@ -567,6 +613,10 @@ function(x)
                              GV_StringifyNodeEdgeAttrs(GV_EdgeAttrs(x)[line[2]])));
     elif line[1] = "Comment" then
       Append(result, GV_StringifyComment(GV_Comments(x)[line[2]]));
+    elif line[1] = "SubBegin" then
+      Append(result, GV_StringifySubgraphBegin(GV_Subgraphs(x)[line[2]]));
+    elif line[1] = "SubEnd" then
+      Append(result, GV_StringifySubgraphEnd());
     fi;
   od;
   Append(result, "}\n");
