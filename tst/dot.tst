@@ -116,10 +116,15 @@ gap> g := GV_Graph("test-name");;
 gap> GV_Name(g);
 "test-name"
 
-# Test making a digraph w/ only a name
-gap> g := GV_Digraph("test-name");;
+# Test making a digraph w/o a name
+gap> g := GV_Graph();;
 gap> GV_Name(g);
-"test-name"
+""
+
+# Test making a digraph w/o a name
+gap> g := GV_Graph();;
+gap> GV_Name(g);
+""
 
 #
 gap> STOP_TEST("Digraphs package: standard/oper.tst", 0);
