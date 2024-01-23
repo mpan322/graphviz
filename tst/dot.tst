@@ -126,6 +126,7 @@ gap> g := GV_Graph();;
 gap> GV_Name(g);
 ""
 
+# Test GV_Peek
 gap> x := GV_Graph(rec(name := "G", comment := "dot"));
 <graphviz graph object with 0 nodes and 0 edges>
 gap> GV_NodeAttr(x, rec(shape := "box"));
