@@ -56,6 +56,7 @@ function(attrs)
                           Name       := attrs.name,
                           Nodes      := rec(),
                           Edges      := [],
+                          Subgraphs  := [],
                           GraphAttrs := [],
                           NodeAttrs  := [],
                           EdgeAttrs  := [],
@@ -92,6 +93,7 @@ function(attrs)
                           Name       := attrs.name,
                           Nodes      := rec(),
                           Edges      := [],
+                          Subgraphs  := [],
                           GraphAttrs := [],
                           NodeAttrs  := [],
                           EdgeAttrs  := [],
@@ -158,6 +160,9 @@ x -> x!.Comments);
 
 InstallMethod(GV_Lines, "for a graphviz object", [IsGVObject],
 x -> x!.Lines);
+
+InstallMethod(GV_Subgraphs, "for a graphviz object", [IsGVObject],
+x -> x!.Subgraphs);
 
 ###############################################################################
 # Setters
@@ -318,7 +323,50 @@ function(x, comment)
   return GV_Comment(x, comment, Length(GV_Lines(x)) + 1);
 end);
 
+InstallMethod(GV_BeginSubgraph, 
+"for a graphviz object, string and pos int",
+[IsGVObject, IsString, IsPosInt],
+function(x, name, line_number) 
+  Add(GV_Subgraphs(x), name);
+  InsertElmList(GV_Lines(x), line_number, ["SubBegin", Length(GV_Subgraphs(x))]);
+  return x;
+end);
 
+InstallMethod(GV_BeginSubgraph, 
+"for a graphviz object and a string",
+[IsGVObject, IsString],
+function(x, name) 
+  return GV_BeginSubgraph(x, name, Length(GV_Lines(x)) + 1);
+end);
+
+InstallMethod(GV_BeginSubgraph, 
+"for a graphviz object and a pos int",
+[IsGVObject, IsPosInt],
+function(x, line_number) 
+  return GV_BeginSubgraph(x, "", line_number);
+end);
+
+InstallMethod(GV_BeginSubgraph, 
+"for a graphviz object",
+[IsGVObject],
+function(x) 
+  return GV_BeginSubgraph(x, "");
+end);
+
+InstallMethod(GV_EndSubgraph, 
+"for a graphviz object and pos int",
+[IsGVObject, IsPosInt],
+function(x, line_number) 
+  InsertElmList(GV_Lines(x), line_number, ["SubEnd"]);
+  return x;
+end);
+
+InstallMethod(GV_EndSubgraph, 
+"for a graphviz object",
+[IsGVObject],
+function(x) 
+  return GV_EndSubgraph(x, Length(GV_Lines(x)) + 1);
+end);
 
 DeclareOperation("GV_RemoveNode", [ IsGVObject, IsString ]);
 InstallMethod(GV_RemoveNode, 
@@ -364,6 +412,8 @@ function(x, line_number)
     GV_RemoveList(x, GV_NodeAttrs(x), "NodeAttr", r[2]);
   elif r[1] = "EdgeAttr" then
     GV_RemoveList(x, GV_EdgeAttrs(x), "EdgeAttr", r[2]);
+  elif r[1] = "SubBegin" then
+    GV_RemoveList(x, GV_Subgraphs(x), "SubBegin", r[2]);
   fi;
 
   return x;

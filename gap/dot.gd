@@ -22,6 +22,7 @@ DeclareOperation("GV_Nodes", [IsGVObject]);
 DeclareOperation("GV_Edges", [IsGVObject]);
 DeclareOperation("GV_Comments", [IsGVObject]);
 DeclareOperation("GV_Lines", [IsGVObject]);
+DeclareOperation("GV_Subgraphs", [IsGVObject]);
 
 # Setters
 DeclareOperation("GV_Name",
@@ -53,7 +54,7 @@ DeclareOperation("GV_Node",
 DeclareOperation("GV_Node",
                  [IsGVObject, IsString, IsString]);
 DeclareOperation("GV_Node",
-                 [IsGVObject, IsString, IsPosInt]);#]
+                 [IsGVObject, IsString, IsPosInt]);
 DeclareOperation("GV_Node",
                  [IsGVObject, IsString]);
 
@@ -70,6 +71,20 @@ DeclareOperation("GV_Comment",
                  [IsGVObject, IsString, IsPosInt]);
 DeclareOperation("GV_Comment",
                  [IsGVObject, IsString]);
+
+DeclareOperation("GV_BeginSubgraph", 
+                 [IsGVObject, IsString, IsPosInt]);
+DeclareOperation("GV_BeginSubgraph", 
+                 [IsGVObject, IsString]);
+DeclareOperation("GV_BeginSubgraph", 
+                 [IsGVObject, IsPosInt]);
+DeclareOperation("GV_BeginSubgraph", 
+                 [IsGVObject]);
+
+DeclareOperation("GV_EndSubgraph", 
+                 [IsGVObject, IsPosInt]);
+DeclareOperation("GV_EndSubgraph", 
+                 [IsGVObject]);
 
 DeclareOperation("GV_Remove",
                  [IsGVObject, IsPosInt]);
