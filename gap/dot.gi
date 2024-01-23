@@ -319,7 +319,14 @@ end);
 InstallMethod(GV_Remove, "for a graphviz object and a pos int",
 [IsGVObject, IsPosInt],
 function(x, line_number)
-  Remove(GV_Lines(x), line_number);
+  local r;
+  r := Remove(GV_Lines(x), line_number);
+
+  # if its a node remove it from the graph
+  if r[1] = "Node" then
+    Unbind(GV_Nodes(x).(r[2]));
+  fi;
+
   return x;
 end);
 

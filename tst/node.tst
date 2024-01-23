@@ -53,4 +53,15 @@ gap> GV_Lines(g);
 gap> GV_String(g);
 "graph  {\n\ttest-node-t\n\ttest-node-m\n\ttest-node-b\n}\n"
 
+# Test remove node
+gap> g := GV_Graph();;
+gap> GV_Node(g, "test-node-t");;
+gap> GV_Node(g, "test-node-b");;
+gap> GV_Node(g, "test-node-m", 3);;
+gap> GV_Remove(g, 3);;
+gap> GV_Lines(g);
+[ [ "Head" ], [ "Node", "test-node-t" ], [ "Node", "test-node-b" ] ]
+gap> GV_Nodes(g);
+rec( ("test-node-b") := rec(  ), ("test-node-t") := rec(  ) )
+
 #
