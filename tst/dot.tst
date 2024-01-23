@@ -126,5 +126,44 @@ gap> g := GV_Graph();;
 gap> GV_Name(g);
 ""
 
+gap> x := GV_Graph(rec(name := "G", comment := "dot"));
+<graphviz graph object with 0 nodes and 0 edges>
+gap> GV_NodeAttr(x, rec(shape := "box"));
+<graphviz graph object with 0 nodes and 0 edges>
+gap> GV_Edge(x, "run", "intr");
+<graphviz graph object with 0 nodes and 1 edges>
+gap> GV_Edge(x, "intr", "runbl");
+<graphviz graph object with 0 nodes and 2 edges>
+gap> GV_Edge(x, "runbl", "run");
+<graphviz graph object with 0 nodes and 3 edges>
+gap> GV_Edge(x, "run", "kernel");
+<graphviz graph object with 0 nodes and 4 edges>
+gap> GV_Edge(x, "kernel", "zombie");
+<graphviz graph object with 0 nodes and 5 edges>
+gap> GV_Edge(x, "kernel", "sleep");
+<graphviz graph object with 0 nodes and 6 edges>
+gap> GV_Edge(x, "kernel", "runmem");
+<graphviz graph object with 0 nodes and 7 edges>
+gap> GV_NodeAttr(x, rec(shape := "circle"));
+<graphviz graph object with 0 nodes and 7 edges>
+gap> GV_Edge(x, "sleep", "swap");
+<graphviz graph object with 0 nodes and 8 edges>
+gap> GV_Edge(x, "swap", "runswap");
+<graphviz graph object with 0 nodes and 9 edges>
+gap> GV_Edge(x, "runswap", "new");
+<graphviz graph object with 0 nodes and 10 edges>
+gap> GV_Edge(x, "runswap", "runmem");
+<graphviz graph object with 0 nodes and 11 edges>
+gap> GV_Edge(x, "new", "runmem");
+<graphviz graph object with 0 nodes and 12 edges>
+gap> GV_Edge(x, "sleep", "runmem");
+<graphviz graph object with 0 nodes and 13 edges>
+gap> GV_Peek(x);
+"1 //dot\n2 graph G {\n3 \tnode  [shape=box]\n4 \trun -- intr\n5 \tintr -- run\
+bl\n6 \trunbl -- run\n7 \trun -- kernel\n8 \tkernel -- zombie\n9 \tkernel -- s\
+leep\n10 \tkernel -- runmem\n11 \tnode  [shape=circle]\n12 \tsleep -- swap\n13\
+ \tswap -- runswap\n14 \trunswap -- new\n15 \trunswap -- runmem\n16 \tnew -- r\
+unmem\n17 \tsleep -- runmem\n}\n"
+
 #
 gap> STOP_TEST("Digraphs package: standard/oper.tst", 0);

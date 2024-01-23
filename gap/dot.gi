@@ -354,20 +354,15 @@ function(x, line_number)
   r := Remove(GV_Lines(x), line_number);
   x!.Lines := Compacted(GV_Lines(x));
 
-  # How do you do else-if in gap lol?
   if r[1] = "Node" then
     GV_RemoveNode(x, r[2]);
-  fi;
-  if r[1] = "Edge" then
+  elif r[1] = "Edge" then
     GV_RemoveList(x, GV_Edges(x), "Edge", r[2]);
-  fi;
-  if r[1] = "GraphAttr" then
+  elif r[1] = "GraphAttr" then
     GV_RemoveList(x, GV_GraphAttrs(x), "GraphAttr", r[2]);
-  fi;
-  if r[1] = "NodeAttr" then
+  elif r[1] = "NodeAttr" then
     GV_RemoveList(x, GV_NodeAttrs(x), "NodeAttr", r[2]);
-  fi;
-  if r[1] = "EdgeAttr" then
+  elif r[1] = "EdgeAttr" then
     GV_RemoveList(x, GV_EdgeAttrs(x), "EdgeAttr", r[2]);
   fi;
 
@@ -527,3 +522,41 @@ function(x)
   Append(result, "}\n");
   return result;
 end);
+
+
+InstallMethod(GV_Peek, "for a graphviz object",
+[IsGVObject],
+function(x)
+  local result, line, i;
+
+  result := "";
+  for i in [1 .. Length(GV_Lines(x))] do
+    line := GV_Lines(x)[i];
+    if line[1] = "Head" then
+      Append(result, 
+          StringFormatted("{} {}", i, GV_Head(x)));
+    elif line[1] = "Node" then
+      Append(result,
+          StringFormatted("{} {}", i, CallFuncList(GV_StringifyNode, [line[2], GV_Nodes(x).(line[2])])));
+    elif line[1] = "Edge" then
+      Append(result, 
+          StringFormatted("{} {}", i, CallFuncList(x!.EdgeFunc, GV_Edges(x)[line[2]])));
+    elif line[1] = "GraphAttr" then
+      Append(result, GV_StringifyGraphAttrs(GV_GraphAttrs(x)[line[2]]));
+    elif line[1] = "NodeAttr" then
+      Append(result,
+             StringFormatted("{} \tnode {}\n",
+                             i, GV_StringifyNodeEdgeAttrs(GV_NodeAttrs(x)[line[2]])));
+    elif line[1] = "EdgeAttr" then
+      Append(result,
+             StringFormatted("{} \tedge {}\n",
+                             i, GV_StringifyNodeEdgeAttrs(GV_EdgeAttrs(x)[line[2]])));
+    elif line[1] = "Comment" then
+      Append(result, 
+              StringFormatted("{} {}", i, GV_StringifyComment(GV_Comments(x)[line[2]])));
+    fi;
+  od;
+  Append(result, "}\n");
+  return result;
+end);
+

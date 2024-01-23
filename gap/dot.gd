@@ -70,9 +70,10 @@ DeclareOperation("GV_Comment",
                  [IsGVObject, IsString, IsPosInt]);
 DeclareOperation("GV_Comment",
                  [IsGVObject, IsString]);
-                 
+
 DeclareOperation("GV_Remove",
                  [IsGVObject, IsPosInt]);
 
 # Output
 DeclareOperation("GV_String", [IsGVObject]);
+DeclareOperation("GV_Peek", [IsGVObject]);
