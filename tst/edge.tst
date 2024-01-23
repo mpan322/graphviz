@@ -15,7 +15,7 @@ gap> LoadPackage("graphviz", false);;
 gap> g := GV_Graph();;
 gap> GV_Edge(g, "a", "b");;
 gap> GV_Lines(g);
-[ [ "Head" ], [ "Edge", 1, "a", "b" ] ]
+[ [ "Head" ], [ "Edge", 1 ] ]
 gap> GV_Edges(g);
 [ [ "a", "b", rec(  ) ] ]
 
@@ -25,7 +25,7 @@ gap> GV_Edge(g, "a", "b", rec(color := "red"));;
 gap> GV_Edges(g);
 [ [ "a", "b", rec( color := "red" ) ] ]
 gap> GV_Lines(g);
-[ [ "Head" ], [ "Edge", 1, "a", "b" ] ]
+[ [ "Head" ], [ "Edge", 1 ] ]
 
 # Test creating a duplicate edge works
 gap> g := GV_Graph();;
@@ -35,7 +35,7 @@ gap> GV_Edges(g);
 [ [ "a", "b", rec( color := "red" ) ], 
   [ "a", "b", rec( label := "duplicate" ) ] ]
 gap> GV_Lines(g);
-[ [ "Head" ], [ "Edge", 1, "a", "b" ], [ "Edge", 2, "a", "b" ] ]
+[ [ "Head" ], [ "Edge", 1 ], [ "Edge", 2 ] ]
 gap> GV_String(g);
 "graph  {\n\ta -- b [color=red]\n\ta -- b [label=\"duplicate\"]\n}\n"
 
@@ -48,9 +48,20 @@ gap> GV_Edges(g);
 [ [ "a", "b", rec( color := "red" ) ], [ "e", "f", rec( color := "red" ) ], 
   [ "c", "d", rec(  ) ] ]
 gap> GV_Lines(g);
-[ [ "Head" ], [ "Edge", 1, "a", "b" ], [ "Edge", 3, "c", "d" ], 
-  [ "Edge", 2, "e", "f" ] ]
+[ [ "Head" ], [ "Edge", 1 ], [ "Edge", 3 ], [ "Edge", 2 ] ]
 gap> GV_String(g);
 "graph  {\n\ta -- b [color=red]\n\tc -- d\n\te -- f [color=red]\n}\n"
+
+# Remove an edge
+gap> g := GV_Graph();;
+gap> GV_Edge(g, "a", "b", rec(color := "red"));;
+gap> GV_Edge(g, "e", "f", rec(color := "red"));;
+gap> GV_Edge(g, "c", "d", 3);;
+gap> GV_Remove(g, 3);;
+gap> GV_Edges(g);
+[ [ "a", "b", rec( color := "red" ) ], [ "e", "f", rec( color := "red" ) ], 
+  [ "c", "d", rec(  ) ] ]
+gap> GV_Lines(g);
+[ [ "Head" ], [ "Edge", 1 ], [ "Edge", 2 ] ]
 
 #

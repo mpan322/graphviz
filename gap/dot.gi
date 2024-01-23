@@ -276,7 +276,7 @@ InstallMethod(GV_Edge,
 [IsGVObject, IsString, IsString, IsRecord, IsPosInt],
 function(x, tail_name, head_name, attrs, line)
   Add(GV_Edges(x), [tail_name, head_name, attrs]);
-  InsertElmList(GV_Lines(x), line, ["Edge", Length(GV_Edges(x)), tail_name, head_name]);
+  InsertElmList(GV_Lines(x), line, ["Edge", Length(GV_Edges(x))]);
   return x;
 end);
 
@@ -285,7 +285,7 @@ InstallMethod(GV_Edge,
 [IsGVObject, IsString, IsString, IsRecord],
 function(x, tail_name, head_name, attrs)
   Add(GV_Edges(x), [tail_name, head_name, attrs]);
-  Add(GV_Lines(x), ["Edge", Length(GV_Edges(x)), tail_name, head_name]);
+  Add(GV_Lines(x), ["Edge", Length(GV_Edges(x))]);
   return x;
 end);
 
