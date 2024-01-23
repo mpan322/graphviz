@@ -178,6 +178,7 @@ function(x, attr, line_number)
   InsertElmList(GV_Lines(x),
                 line_number,
                 ["GraphAttr", Length(GV_GraphAttrs(x))]);
+  x!.Lines := Compacted(x!.Lines);
   return x;
 end);
 
@@ -192,6 +193,7 @@ InstallMethod(GV_NodeAttr, "for a graphviz object, record, and pos int",
 function(x, attr, line_number)
   Add(GV_NodeAttrs(x), attr);
   InsertElmList(GV_Lines(x), line_number, ["NodeAttr", Length(GV_NodeAttrs(x))]);
+  x!.Lines := Compacted(x!.Lines);
   return x;
 end);
 
@@ -326,37 +328,47 @@ function(x, name)
   Unbind(GV_Nodes(x).(name));
 end);
 
-DeclareOperation("GV_RemoveEdge", [ IsGVObject, IsPosInt ]);
-InstallMethod(GV_RemoveEdge, 
-"for a graphviz object and a pos int",
-[IsGVObject, IsPosInt],
-function(x, idx)
+DeclareOperation("GV_RemoveList", [ IsGVObject, IsList, IsString, IsPosInt ]);
+InstallMethod(GV_RemoveList, 
+"for a graphviz object, list, string and pos int",
+[IsGVObject, IsList, IsString, IsPosInt],
+function(x, list, type, idx)
   local lines, line;
   lines := GV_Lines(x);
 
   for line in lines do
-    if line[1] = "Edge" and line[2] > idx then
+    if line[1] = type and line[2] > idx then
       line[2] := line[2] - 1;
     fi;
   od;
 
-  Remove(GV_Edges(x), idx);
+  Remove(list, idx);
 end);
+
 
 
 InstallMethod(GV_Remove, "for a graphviz object and a pos int",
 [IsGVObject, IsPosInt],
 function(x, line_number)
-  local r, edge;
+  local r;
   r := Remove(GV_Lines(x), line_number);
+  x!.Lines := Compacted(GV_Lines(x));
 
-  # if its a node remove it from the graph
+  # How do you do else-if in gap lol?
   if r[1] = "Node" then
     GV_RemoveNode(x, r[2]);
   fi;
-
   if r[1] = "Edge" then
-    GV_RemoveEdge(x, r[2]);
+    GV_RemoveList(x, GV_Edges(x), "Edge", r[2]);
+  fi;
+  if r[1] = "GraphAttr" then
+    GV_RemoveList(x, GV_GraphAttrs(x), "GraphAttr", r[2]);
+  fi;
+  if r[1] = "NodeAttr" then
+    GV_RemoveList(x, GV_NodeAttrs(x), "NodeAttr", r[2]);
+  fi;
+  if r[1] = "EdgeAttr" then
+    GV_RemoveList(x, GV_EdgeAttrs(x), "EdgeAttr", r[2]);
   fi;
 
   return x;
@@ -506,7 +518,7 @@ function(x)
                              GV_StringifyNodeEdgeAttrs(GV_NodeAttrs(x)[line[2]])));
     elif line[1] = "EdgeAttr" then
       Append(result,
-             StringFormatted("\tedges {}\n",
+             StringFormatted("\tedge {}\n",
                              GV_StringifyNodeEdgeAttrs(GV_EdgeAttrs(x)[line[2]])));
     elif line[1] = "Comment" then
       Append(result, GV_StringifyComment(GV_Comments(x)[line[2]]));

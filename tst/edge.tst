@@ -62,5 +62,7 @@ gap> GV_Edges(g);
 [ [ "e", "f", rec( color := "red" ) ], [ "c", "d", rec(  ) ] ]
 gap> GV_Lines(g);
 [ [ "Head" ], [ "Edge", 2 ], [ "Edge", 1 ] ]
+gap> GV_String(g);
+"graph  {\n\tc -- d\n\te -- f [color=red]\n}\n"
 
 #
