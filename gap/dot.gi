@@ -316,15 +316,47 @@ function(x, comment)
   return GV_Comment(x, comment, Length(GV_Lines(x)) + 1);
 end);
 
+
+
+DeclareOperation("GV_RemoveNode", [ IsGVObject, IsString ]);
+InstallMethod(GV_RemoveNode, 
+"for a graphviz object and a string",
+[IsGVObject, IsString],
+function(x, name)
+  Unbind(GV_Nodes(x).(name));
+end);
+
+DeclareOperation("GV_RemoveEdge", [ IsGVObject, IsPosInt ]);
+InstallMethod(GV_RemoveEdge, 
+"for a graphviz object and a pos int",
+[IsGVObject, IsPosInt],
+function(x, idx)
+  local lines, line;
+  lines := GV_Lines(x);
+
+  for line in lines do
+    if line[1] = "Edge" and line[2] > idx then
+      line[2] := line[2] - 1;
+    fi;
+  od;
+
+  Remove(GV_Edges(x), idx);
+end);
+
+
 InstallMethod(GV_Remove, "for a graphviz object and a pos int",
 [IsGVObject, IsPosInt],
 function(x, line_number)
-  local r;
+  local r, edge;
   r := Remove(GV_Lines(x), line_number);
 
   # if its a node remove it from the graph
   if r[1] = "Node" then
-    Unbind(GV_Nodes(x).(r[2]));
+    GV_RemoveNode(x, r[2]);
+  fi;
+
+  if r[1] = "Edge" then
+    GV_RemoveEdge(x, r[2]);
   fi;
 
   return x;

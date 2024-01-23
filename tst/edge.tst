@@ -57,11 +57,10 @@ gap> g := GV_Graph();;
 gap> GV_Edge(g, "a", "b", rec(color := "red"));;
 gap> GV_Edge(g, "e", "f", rec(color := "red"));;
 gap> GV_Edge(g, "c", "d", 3);;
-gap> GV_Remove(g, 3);;
+gap> GV_Remove(g, 2);;
 gap> GV_Edges(g);
-[ [ "a", "b", rec( color := "red" ) ], [ "e", "f", rec( color := "red" ) ], 
-  [ "c", "d", rec(  ) ] ]
+[ [ "e", "f", rec( color := "red" ) ], [ "c", "d", rec(  ) ] ]
 gap> GV_Lines(g);
-[ [ "Head" ], [ "Edge", 1 ], [ "Edge", 2 ] ]
+[ [ "Head" ], [ "Edge", 2 ], [ "Edge", 1 ] ]
 
 #
