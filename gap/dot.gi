@@ -560,3 +560,9 @@ function(x)
   return result;
 end);
 
+InstallMethod(GV_Save, 
+"for graphviz object and string",
+[IsGVObject, IsString],
+function(x, path)
+  PrintTo(path, GV_String(x));
+end);

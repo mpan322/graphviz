@@ -165,6 +165,7 @@ bl\n6 \trunbl -- run\n7 \trun -- kernel\n8 \tkernel -- zombie\n9 \tkernel -- s\
 leep\n10 \tkernel -- runmem\n11 \tnode  [shape=circle]\n12 \tsleep -- swap\n13\
  \tswap -- runswap\n14 \trunswap -- new\n15 \trunswap -- runmem\n16 \tnew -- r\
 unmem\n17 \tsleep -- runmem\n}\n"
+gap> GV_Save(x, "./test.out");
 
 #
 gap> STOP_TEST("Digraphs package: standard/oper.tst", 0);

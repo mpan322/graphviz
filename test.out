@@ -1,0 +1,18 @@
+//dot
+graph G {
+	node  [shape=box]
+	run -- intr
+	intr -- runbl
+	runbl -- run
+	run -- kernel
+	kernel -- zombie
+	kernel -- sleep
+	kernel -- runmem
+	node  [shape=circle]
+	sleep -- swap
+	swap -- runswap
+	runswap -- new
+	runswap -- runmem
+	new -- runmem
+	sleep -- runmem
+}

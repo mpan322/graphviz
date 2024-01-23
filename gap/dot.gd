@@ -77,3 +77,4 @@ DeclareOperation("GV_Remove",
 # Output
 DeclareOperation("GV_String", [IsGVObject]);
 DeclareOperation("GV_Peek", [IsGVObject]);
+DeclareOperation("GV_Save", [IsGVObject, IsString]);
