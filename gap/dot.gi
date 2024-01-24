@@ -627,7 +627,15 @@ end);
 InstallMethod(GV_Peek, "for a graphviz object",
 [IsGVObject],
 function(x)
-  local result, line, i;
+  local result, info, line, i;
+
+  info := GV_ValidateSubgraphs(x);
+  if info[1] < 0 then
+    return StringFormatted("Failed to output - Too many ending brackets. Line: {}\n", info[2]);
+  elif info[1] > 0 then 
+    return "Failed to output - Too few ending brackets\n";
+  fi;
+
 
   result := "";
   for i in [1 .. Length(GV_Lines(x))] do
@@ -654,6 +662,12 @@ function(x)
     elif line[1] = "Comment" then
       Append(result, 
               StringFormatted("{} {}", i, GV_StringifyComment(GV_Comments(x)[line[2]])));
+    elif line[1] = "SubBegin" then
+      Append(result, 
+        StringFormatted("{} {}", i, GV_StringifySubgraphBegin(GV_Subgraphs(x)[line[2]])));
+    elif line[1] = "SubEnd" then
+      Append(result, 
+        StringFormatted("{} {}", i, GV_StringifySubgraphEnd()));
     fi;
   od;
   Append(result, "}\n");

@@ -11,3 +11,6 @@
 
 ## Bug
 - Make sure no holes related problems when generating the output string.
+
+
+<!-- Digraph 6 stirng (look at print D) as comment in graphviz file??? -->
