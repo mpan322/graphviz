@@ -669,9 +669,9 @@ end);
 
 InstallMethod(GV_DotDigraph,
 "for a digraph",
-[IsDigraph],
-function(D)
-  local x, str, out, i, j, l;
+[IsDigraph, IsList, IsList],
+function(D, node_funcs, edge_funcs)
+  local x, func, str, out, i, j, l;
   
   x := GV_Digraph();
   GV_Comment(x, "//dot", 1);
@@ -679,6 +679,9 @@ function(D)
 
   for i in DigraphVertices(D) do
     GV_Node(x, StringFormatted("{}", i));
+    for func in node_funcs do 
+      func(x, i);
+    od;
   od;
 
   out := OutNeighbours(D);
@@ -686,7 +689,137 @@ function(D)
     l := Length(out[i]);
     for j in [1 .. l] do
       GV_Edge(x, StringFormatted("{}", i), StringFormatted("{}", out[i][j]));
+      for func in edge_funcs do 
+        func(x, i, j);
+      od;
     od;
   od;
   return x;
 end);
+
+
+BindGlobal("GV_DIGRAPHS_ValidRGBValue",
+function(str)
+  local l, chars, x, i;
+  l := Length(str);
+  x := 0;
+  chars := "0123456789ABCDEFabcdef";
+  if l = 7 then
+    if str[1] = '#' then
+      for i in [2 .. l] do
+        if str[i] in chars then
+            x := x + 1;
+        fi;
+      od;
+    fi;
+  fi;
+  if x = (l - 1) then
+    return true;
+  else
+    return false;
+  fi;
+end);
+
+BindGlobal("GV_DIGRAPHS_GraphvizColorsList", fail);
+
+BindGlobal("GV_DIGRAPHS_GraphvizColors",
+function()
+  local f;
+  if GV_DIGRAPHS_GraphvizColorsList = fail then
+    f := IO_File(Concatenation(DIGRAPHS_Dir(), "/data/colors.p"));
+    MakeReadWriteGlobal("GV_DIGRAPHS_GraphvizColorsList");
+    GV_DIGRAPHS_GraphvizColorsList := IO_Unpickle(f);
+    MakeReadOnlyGlobal("GV_DIGRAPHS_GraphvizColorsList");
+    IO_Close(f);
+  fi;
+  return GV_DIGRAPHS_GraphvizColorsList;
+end);
+
+BindGlobal("GV_DIGRAPHS_ValidVertColors",
+function(D, verts)
+  local v, sum, colors, col;
+  v := DigraphVertices(D);
+  sum := 0;
+  if Length(verts) <> Length(v) then
+    ErrorNoReturn("the number of vertex colors must be the same as the number",
+    " of vertices, expected ", Length(v), " but found ", Length(verts), "");
+  fi;
+  colors := GV_DIGRAPHS_GraphvizColors();
+  if Length(verts) = Length(v) then
+    for col in verts do
+      if not IsString(col) then
+        ErrorNoReturn("expected a string");
+      elif GV_DIGRAPHS_ValidRGBValue(col) = false and
+          (col in colors) = false then
+        ErrorNoReturn("expected RGB Value or valid color name as defined",
+        " by GraphViz 2.44.1 X11 Color Scheme",
+        " http://graphviz.org/doc/info/colors.html");
+      else
+        sum := sum + 1;
+      fi;
+    od;
+    if sum = Length(verts) then
+      return true;
+    fi;
+  fi;
+end);
+
+BindGlobal("GV_DIGRAPHS_ValidEdgeColors",
+function(D, edge)
+  local out, l, counter, sum, colors, v, col;
+  out := OutNeighbours(D);
+  l := Length(edge);
+  counter := 0;
+  sum := 0;
+  colors := GV_DIGRAPHS_GraphvizColors();
+  if Length(edge) <> Length(out) then
+    ErrorNoReturn("the list of edge colors needs to have the",
+    " same shape as the out-neighbours of the digraph");
+  else
+    for v in [1 .. l] do
+      sum := 0;
+      if Length(out[v]) <> Length(edge[v]) then
+        ErrorNoReturn("the list of edge colors needs to have the",
+        " same shape as the out-neighbours of the digraph");
+      else
+        for col in edge[v] do
+          if not IsString(col) then
+            ErrorNoReturn("expected a string");
+          elif GV_DIGRAPHS_ValidRGBValue(col) = false and
+              (col in colors) = false then
+            ErrorNoReturn("expected RGB Value or valid color name as defined",
+            " by GraphViz 2.44.1 X11 Color Scheme",
+            " http://graphviz.org/doc/info/colors.html");
+          else
+            sum := sum + 1;
+          fi;
+        od;
+        if sum = Length(edge[v]) then
+          counter := counter + 1;
+        fi;
+      fi;
+    od;
+    if counter = Length(edge) then
+      return true;
+    fi;
+  fi;
+end);
+
+InstallMethod(GV_DotDigraph, 
+"for a digraph by out-neighbours",
+[IsDigraphByOutNeighboursRep],
+D -> GV_DotDigraph(D, [], []));
+
+InstallMethod(GV_DotColoredDigraph, 
+"for a digraph by out-neighbours and two lists",
+[IsDigraphByOutNeighboursRep, IsList, IsList],
+function(D, vert, edge)
+  local vert_func, edge_func;
+  if GV_DIGRAPHS_ValidVertColors(D, vert) and GV_DIGRAPHS_ValidEdgeColors(D, edge) then
+    vert_func := i -> StringFormatted("[color={}, style=filled]", vert[i]);
+    edge_func := {i, j} -> StringFormatted("[color={}]", edge[i][j]);
+    return GV_DotDigraph(D, [vert_func], [edge_func]);
+  fi;
+end);
+
+
