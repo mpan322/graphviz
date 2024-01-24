@@ -85,7 +85,7 @@ DeclareOperation("GV_EndSubgraph",
                  [IsGVObject, IsPosInt]);
 DeclareOperation("GV_EndSubgraph", 
                  [IsGVObject]);
-
+                 
 DeclareOperation("GV_Remove",
                  [IsGVObject, IsPosInt]);
 

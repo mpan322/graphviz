@@ -674,7 +674,7 @@ function(D, node_funcs, edge_funcs)
   local x, func, str, out, i, j, l;
   
   x := GV_Digraph();
-  GV_Comment(x, "//dot", 1);
+  GV_Comment(x, "dot", 1);
   GV_NodeAttr(x, rec( shape := "circle" ));
 
   for i in DigraphVertices(D) do
@@ -816,10 +816,47 @@ InstallMethod(GV_DotColoredDigraph,
 function(D, vert, edge)
   local vert_func, edge_func;
   if GV_DIGRAPHS_ValidVertColors(D, vert) and GV_DIGRAPHS_ValidEdgeColors(D, edge) then
-    vert_func := i -> StringFormatted("[color={}, style=filled]", vert[i]);
-    edge_func := {i, j} -> StringFormatted("[color={}]", edge[i][j]);
+    vert_func := function(x, i)
+      local l;
+      l := StringFormatted("{}", i);
+      GV_Node(x, l, rec(style:="filled", color:=vert[i]));
+    end;
+    edge_func := function(x, i, j)
+      local l1, l2;
+      l1 := StringFormatted("{}", i);
+      l2 := StringFormatted("{}", j);
+      GV_Remove(x, Length(GV_Lines(x)));
+      GV_Edge(x, l1, l2, rec(color:=edge[i][j]));
+    end;
     return GV_DotDigraph(D, [vert_func], [edge_func]);
   fi;
 end);
 
+InstallMethod(DotEdgeColoredDigraph,
+"for a digraph by out-neighbours and a list",
+[IsDigraphByOutNeighboursRep, IsList],
+function(D, edge)
+  local func;
+  if DIGRAPHS_ValidEdgeColors(D, edge) then
+    func := function(x, i, j)
+      local l1, l2;
+      l1 := StringFormatted("{}", i);
+      l2 := StringFormatted("{}", j);
+      GV_Remove(x, Length(GV_Lines(x)));
+      GV_Edge(x, l1, l2, rec(color:=edge[i][j]));
+    end;
+    return GV_DotDigraph(D, [], [func]);
+  fi;
+end);
 
+InstallMethod(DotVertexLabelledDigraph, "for a digraph by out-neighbours",
+[IsDigraphByOutNeighboursRep],
+function(D)
+  local func;
+  func := function(x, i)
+    local l;
+    l := StringFormatted("{}", i);
+    GV_Node(x, l, rec(label:=DigraphVertexLabel(D, i)));
+  end;  
+  return GV_DotDigraph(D, [func], []);
+end);

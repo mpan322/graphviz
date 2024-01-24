@@ -1,18 +1,10 @@
-//dot
-graph G {
-	node  [shape=box]
-	run -- intr
-	intr -- runbl
-	runbl -- run
-	run -- kernel
-	kernel -- zombie
-	kernel -- sleep
-	kernel -- runmem
+////dot
+digraph  {
 	node  [shape=circle]
-	sleep -- swap
-	swap -- runswap
-	runswap -- new
-	runswap -- runmem
-	new -- runmem
-	sleep -- runmem
+	1 [style=filled, color=red]
+	2 [style=filled, color=green]
+	1 -> 1 [color=red]
+	1 -> 2 [color=blue]
+	2 -> 1 [color=red]
+	2 -> 2 [color=green]
 }
