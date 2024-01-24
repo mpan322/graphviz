@@ -89,6 +89,9 @@ DeclareOperation("GV_EndSubgraph",
 DeclareOperation("GV_Remove",
                  [IsGVObject, IsPosInt]);
 
+# Input
+DeclareOperation("GV_DotDigraph", [IsDigraph]);
+
 # Output
 DeclareOperation("GV_String", [IsGVObject]);
 DeclareOperation("GV_Peek", [IsGVObject]);

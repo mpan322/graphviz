@@ -4,6 +4,7 @@
  - Potentially merge / minimize attribute declarations when possible 
  (not needed but may be nice)
  - Implement loading from a file
+ - implement method each default currently available in the display.gi using the new graphviz system.
 
 ## Issues
  - Not super happy with the current subgraph implementation, its a bit wonky but does work.

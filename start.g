@@ -1,1 +1,2 @@
+LoadPackage("digraphs");
 LoadPackage("graphviz");

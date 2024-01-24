@@ -666,3 +666,27 @@ InstallMethod(GV_Save,
 function(x, path)
   PrintTo(path, GV_String(x));
 end);
+
+InstallMethod(GV_DotDigraph,
+"for a digraph",
+[IsDigraph],
+function(D)
+  local x, str, out, i, j, l;
+  
+  x := GV_Digraph();
+  GV_Comment(x, "//dot", 1);
+  GV_NodeAttr(x, rec( shape := "circle" ));
+
+  for i in DigraphVertices(D) do
+    GV_Node(x, StringFormatted("{}", i));
+  od;
+
+  out := OutNeighbours(D);
+  for i in DigraphVertices(D) do
+    l := Length(out[i]);
+    for j in [1 .. l] do
+      GV_Edge(x, StringFormatted("{}", i), StringFormatted("{}", out[i][j]));
+    od;
+  od;
+  return x;
+end);
