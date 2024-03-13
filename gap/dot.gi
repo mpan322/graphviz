@@ -14,7 +14,7 @@ DeclareOperation("GV_StringifyDigraphEdge", [IsGVEdge]);
 DeclareOperation("GV_StringifyNode", [IsGVNode]);
 DeclareOperation("GV_StringifyGraphAttrs", [IsGVGraph]);
 DeclareOperation("GV_StringifyNodeEdgeAttrs", [IsHashMap]);
-DeclareOperation("GV_StringifyGraph", [IsGVGraph, IsBool]);
+DeclareOperation("GV_StringifyGraph", [IsGVGraph, IsBool, IsBool]);
 
 DeclareOperation("GV_FindNode", [IsGVGraph, IsObject]);
 
@@ -287,6 +287,14 @@ InstallMethod(GV_GetSubgraph,
 "for a graphviz graph and an object", 
 [IsGVGraph, IsObject], 
 {x, o} -> GV_Subgraphs(x)[ViewString(o)]);
+
+DeclareOperation("GV_HasParent", [IsGVGraph]);
+InstallMethod(GV_HasParent,
+"for a graphviz graph",
+[IsGVGraph],
+function(g)
+    return IsBound(g!.Parent) and g!.Parent <> fail;
+end);
 
 InstallMethod(GV_IncCounter, 
 "for a graphviz graph",
@@ -951,11 +959,16 @@ function(graph)
 end);
 
 InstallMethod(GV_StringifyGraph,
-"for a graphviz graph and a string",
-[IsGVGraph, IsBool],
-function(graph, is_subgraph)
+"for a graphviz graph and two booleans",
+[IsGVGraph, IsBool, IsBool],
+function(graph, is_subgraph, directed)
   local result, obj;
   result := "";
+
+  # make sure root is not context (for edge types)
+  if IsGVContext(graph) and not is_subgraph then
+    return ErrorNoReturn("Root graph cannot be a context!");
+  fi;
 
   # get the correct head to use
   if is_subgraph then
@@ -981,11 +994,11 @@ function(graph, is_subgraph)
   # Add child graphviz objects
   for obj in GV_ConstructHistory(graph) do
     if IsGVGraph(obj) then
-      Append(result, GV_StringifyGraph(obj, true));
+      Append(result, GV_StringifyGraph(obj, true, directed));
     elif IsGVNode(obj) then
       Append(result, GV_StringifyNode(obj));
     elif IsGVEdge(obj) then
-      if IsGVDigraph(graph) or (IsGVContext(graph) and IsGVDigraph(GV_GetParent(graph))) then
+      if directed then
         Append(result, GV_StringifyDigraphEdge(obj));
       else
         Append(result, GV_StringifyGraphEdge(obj));
@@ -1010,7 +1023,7 @@ end);
 InstallMethod(GV_String, "for a graphviz graph",
 [IsGVGraph],
 function(graph)
-  return GV_StringifyGraph(graph, false);
+  return GV_StringifyGraph(graph, false, IsGVDigraph(graph));
 end);
 
 

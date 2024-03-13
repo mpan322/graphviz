@@ -360,4 +360,57 @@ gap> o := GV_FindGraph(g, 1);
 gap> IsIdenticalObj(o, s);
 true
 
+# Test stringifying subgraphs has correct edge type (digraph)
+gap> d := GV_Digraph("test");;
+gap> s := GV_AddSubgraph(d, "sub");;
+gap> GV_AddEdge(s, "a", "b");;
+gap> GV_String(d);
+"digraph test {\nsubgraph sub {\n\t\"a\"\n\t\"b\"\n\t\"a\" -> \"b\"\n}\n}\n"
+
+# Test stringifying subgraphs has correct edge type (graph)
+gap> d := GV_Graph("test");;
+gap> s := GV_AddSubgraph(d, "sub");;
+gap> GV_AddEdge(s, "a", "b");;
+gap> GV_String(d);
+"graph test {\nsubgraph sub {\n\t\"a\"\n\t\"b\"\n\t\"a\" -- \"b\"\n}\n}\n"
+
+# Test stringifying subgraphs has correct edge type (context in graph)
+gap> d := GV_Graph("test");;
+gap> s := GV_AddContext(d, "sub");;
+gap> GV_AddEdge(s, "a", "b");;
+gap> GV_String(d);
+"graph test {\n// sub context \n\t\"a\"\n\t\"b\"\n\t\"a\" -- \"b\"\n\n}\n"
+
+# Test stringifying subgraphs has correct edge type (context in graph)
+gap> d := GV_Digraph("test");;
+gap> s := GV_AddContext(d, "sub");;
+gap> GV_AddEdge(s, "a", "b");;
+gap> GV_String(d);
+"digraph test {\n// sub context \n\t\"a\"\n\t\"b\"\n\t\"a\" -> \"b\"\n\n}\n"
+
+# Test stringifying subgraphs has correct edge type (subgraph in context in graph)
+gap> d := GV_Digraph("test");;
+gap> s := GV_AddContext(d, "sub");;
+gap> GV_AddEdge(s, "a", "b");;
+gap> GV_String(d);
+"digraph test {\n// sub context \n\t\"a\"\n\t\"b\"\n\t\"a\" -> \"b\"\n\n}\n"
+
+# Test stringifying subgraphs has correct edge type (subgraph in context in graph)
+gap> g := GV_Graph("test");;
+gap> c := GV_AddContext(g, "sub");;
+gap> s := GV_AddSubgraph(c, "sub");;
+gap> GV_AddEdge(s, "a", "b");;
+gap> GV_String(g);
+"graph test {\n// sub context \nsubgraph sub {\n\t\"a\"\n\t\"b\"\n\t\"a\" -- \
+\"b\"\n}\n\n}\n"
+
+# Test stringifying subgraphs has correct edge type (subgraph in context in graph)
+gap> g := GV_Digraph("test");;
+gap> c := GV_AddContext(g, "sub");;
+gap> s := GV_AddSubgraph(c, "sub");;
+gap> GV_AddEdge(s, "a", "b");;
+gap> GV_String(g);
+"digraph test {\n// sub context \nsubgraph sub {\n\t\"a\"\n\t\"b\"\n\t\"a\" ->\
+ \"b\"\n}\n\n}\n"
+
 #
