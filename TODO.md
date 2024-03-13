@@ -22,7 +22,7 @@
  - Add (Graphviz [IsObject]) decl which dependent packages implement use 
     - Add validation on quoted input
  - Fix formatting of `dot` output
-
+ - Make it labels are conditionally quoted (at minimum only quoted when necessary).
 
 ## Other
  - relates to deadnaut github issue https://www.mankier.com/1/nauty-dretodot
