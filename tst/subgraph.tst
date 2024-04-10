@@ -174,6 +174,12 @@ gap> s := GraphvizAddSubgraph(g);;
 gap> AsString(g);
 "digraph  {\nsubgraph no_name_1 {\n}\n}\n"
 
+# finding a node in a graph by name
+gap> g := GraphvizDigraph();;
+gap> a := GraphvizAddNode(g, "a");;
+gap> GV_FindNode(g, "a");
+<graphviz node a>
+
 # finding a node in a sibling graph
 gap> g := GraphvizDigraph();;
 gap> s1 := GraphvizAddSubgraph(g);;

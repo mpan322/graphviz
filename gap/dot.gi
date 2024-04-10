@@ -872,14 +872,37 @@ end);
 InstallMethod(GraphvizAddEdge,
 "for a graphviz graph and two objects",
 [IsGVGraph, IsObject, IsObject],
-function(x, o1, o2)
-  if not IsString(o1) then
-    o1 := ViewString(o1);
+function(x, head, tail)
+  local found_head, found_tail;
+
+  # convert other objects to strings
+  if not IsString(head) and not IsGVNode(head) then
+    head := ViewString(head);
   fi;
-  if not IsString(o2) then
-    o2 := ViewString(o2);
+  if not IsString(tail) and not IsGVNode(tail) then
+    tail := ViewString(tail);
   fi;
-  return GraphvizAddEdge(x, o1, o2);
+
+  # convert strings to nodes
+  if IsString(head) then
+    found_head := GV_FindNode(x, head);
+    if found_head = fail then
+      head := GV_Node(x, head);
+    else
+      head := found_head;
+    fi;
+  fi;
+  if IsString(tail) then
+    found_tail := GV_FindNode(x, tail);
+    if found_tail = fail then
+      tail := GV_Node(x, tail);
+    else
+      tail := found_tail;
+    fi;
+  fi;
+
+  # add the new edge
+  return GraphvizAddEdge(x, head, tail);
 end);
 
 InstallMethod(GraphvizAddSubgraph,

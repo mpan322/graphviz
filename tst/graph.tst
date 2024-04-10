@@ -113,6 +113,22 @@ gap> GraphvizAddEdge(g, "c", "d");
 gap> g;
 <graphviz graph with 4 nodes and 8 edges>
 
+# Test adding edges (mixed nodes & strings & other objects)
+gap> g := GraphvizDigraph();;
+gap> node := GraphvizAddNode(g, "a");;
+gap> GraphvizAddEdge(g, node, 1);
+<graphviz edge (a, 1)>
+gap> GraphvizAddEdge(g, 1, node);
+<graphviz edge (1, a)>
+gap> GraphvizAddEdge(g, node, "string");
+<graphviz edge (a, string)>
+gap> GraphvizAddEdge(g, "string", node);
+<graphviz edge (string, a)>
+gap> GraphvizAddEdge(g, 1, "string");
+<graphviz edge (1, string)>
+gap> GraphvizAddEdge(g, "string", 1);
+<graphviz edge (string, 1)>
+
 # Test removing node
 gap> g := GraphvizGraph();;
 gap> a := GraphvizAddNode(g, "a");;

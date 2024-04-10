@@ -13,6 +13,7 @@
  - Update docs
  - Add more unit tests
  - Thoroughly test the ':' syntax more (might have broke when the quotes were changed)
+ - Add example to the docs of how to use
 
 ## Other
  - relates to deadnaut github issue https://www.mankier.com/1/nauty-dretodot
