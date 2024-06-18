@@ -1,4 +1,4 @@
-#############################################################################
+#############################################################################gv.gd
 ##
 ##  gv.gd
 ##  Copyright (C) 2024                                      James Mitchell
@@ -45,6 +45,7 @@ DeclareOperation("GV_MapNames", [GV_IsMap]);
 DeclareOperation("GV_HasNode", [IsGraphvizGraphDigraphOrContext, IsObject]);
 
 DeclareOperation("GV_GetParent", [IsGraphvizGraphDigraphOrContext]);
+DeclareOperation("GV_HasParent", [IsGraphvizGraphDigraphOrContext]);
 DeclareOperation("GV_GraphTreeSearch",
 [IsGraphvizGraphDigraphOrContext, IsFunction]);
 DeclareOperation("GV_GraphSearchChildren",

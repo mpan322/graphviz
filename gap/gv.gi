@@ -136,9 +136,10 @@ function(graph, name)
   fi;
   out := Objectify(GV_NodeType,
                   rec(
-                    Name  := name,
-                    Attrs := GV_Map(),
-                    Idx   := GV_GetCounter(graph)));
+                    Name     := name,
+                    Attached := fail,
+                    Attrs    := GV_Map(),
+                    Idx      := GV_GetCounter(graph)));
   GV_IncCounter(graph);
   return out;
 end);
@@ -282,6 +283,10 @@ InstallMethod(GV_HasNode,
 InstallMethod(GV_GetParent,
 "for a graphviz graph",
 [IsGraphvizGraphDigraphOrContext], graph -> graph!.Parent);
+
+InstallMethod(GV_HasParent,
+"for a graphviz graph",
+[IsGraphvizGraphDigraphOrContext], graph -> graph!.Parent <> fail);
 
 InstallMethod(GV_GraphTreeSearch,
 "for a graphviz graph and a predicate",

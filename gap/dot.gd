@@ -39,8 +39,9 @@
 DeclareCategory("IsGraphvizObject", IsObject);
 
 DeclareCategory("IsGraphvizGraphDigraphOrContext", IsGraphvizObject);
-DeclareCategory("IsGraphvizGraph", IsGraphvizGraphDigraphOrContext);
-DeclareCategory("IsGraphvizDigraph", IsGraphvizGraphDigraphOrContext);
+DeclareCategory("IsGraphvizGraphOrDigraph", IsGraphvizGraphDigraphOrContext);
+DeclareCategory("IsGraphvizGraph", IsGraphvizGraphOrDigraph);
+DeclareCategory("IsGraphvizDigraph", IsGraphvizGraphOrDigraph);
 DeclareCategory("IsGraphvizContext", IsGraphvizGraphDigraphOrContext);
 
 DeclareCategory("IsGraphvizNodeOrEdge", IsGraphvizObject);
@@ -246,3 +247,19 @@ DeclareOperation("\[\]\:\=", [IsGraphvizEdge, IsObject, IsObject]);
 
 # TODO doc
 DeclareOperation("\[\]", [IsGraphvizGraphDigraphOrContext, IsObject]);
+
+#! @Arguments node graph
+#! @Returns the modified graphviz node.
+#! @Description
+#!  Attaches a graph to the node provided.
+#!  When the parent graph is rendered, the attached
+#!  graph will be rendered seperately. The resulting image will
+#!  then be rendered on the node to which it is attached.
+DeclareOperation("GraphvizAttachGraphOrDigraph",
+[IsGraphvizNode, IsGraphvizGraphOrDigraph]);
+DeclareOperation("GraphvizDetachGraphOrDigraph",
+[IsGraphvizNode]);
+DeclareOperation("GraphvizHasAttachedGraphOrDigraph",
+[IsGraphvizNode]);
+DeclareOperation("GraphvizGetAttachedGraphOrDigraph",
+[IsGraphvizNode]);

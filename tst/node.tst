@@ -8,7 +8,7 @@
 #############################################################################
 ##
 
-#@local color, g, label, n, s, shape
+#@local color, g, label, n, s, shape, t
 gap> START_TEST("graphviz package: node.tst");
 gap> LoadPackage("graphviz", false);;
 
@@ -122,6 +122,58 @@ gap> s := GraphvizGraph();;
 gap> GraphvizAddNode(s, n);
 Error, it is not currently possible to add Graphviz node objects directly to G\
 raphviz graphs or digraphs, use the node's name instead
+
+# Test attaching graphs to nodes works
+gap> g := GraphvizGraph();;
+gap> n := GraphvizAddNode(g, "n");;
+gap> s := GraphvizGraph("test");;
+gap> GraphvizAttachGraphOrDigraph(n, s);
+<graphviz node "n">
+gap> GraphvizHasAttachedGraphOrDigraph(n);
+true
+gap> GraphvizGetAttachedGraphOrDigraph(n);
+<graphviz graph "test" with 0 nodes and 0 edges>
+
+# Test attaching digraphs also works
+gap> g := GraphvizDigraph();;
+gap> n := GraphvizAddNode(g, "n");;
+gap> s := GraphvizDigraph("test");;
+gap> GraphvizAttachGraphOrDigraph(n, s);
+<graphviz node "n">
+gap> GraphvizHasAttachedGraphOrDigraph(n);
+true
+gap> GraphvizGetAttachedGraphOrDigraph(n);
+<graphviz digraph "test" with 0 nodes and 0 edges>
+
+# Test attaching if there is already an attached graph fails.
+gap> g := GraphvizDigraph();;
+gap> n := GraphvizAddNode(g, "n");;
+gap> s := GraphvizDigraph("test");;
+gap> t := GraphvizDigraph("test");;
+gap> GraphvizAttachGraphOrDigraph(n, s);;
+gap> GraphvizAttachGraphOrDigraph(n, t);
+Error, node "n" already has the digraph "test" attached
+gap> t := GraphvizGraph("test");;
+gap> GraphvizAttachGraphOrDigraph(n, t);
+Error, node "n" already has the graph "test" attached
+
+# Test getting an attached graph fails if there is none.
+gap> g := GraphvizDigraph();;
+gap> n := GraphvizAddNode(g, "n");;
+gap> GraphvizGetAttachedGraphOrDigraph(n);
+Error, node "n" has no attached graph or digraph
+
+# Test nodes do not have attached graphs by default.
+gap> g := GraphvizDigraph();;
+gap> n := GraphvizAddNode(g, "n");;
+gap> GraphvizHasAttachedGraphOrDigraph(n);
+false
+
+# Test detaching fails if no graphs are attached.
+gap> g := GraphvizDigraph();;
+gap> n := GraphvizAddNode(g, "n");;
+gap> GraphvizDetachGraphOrDigraph(n);
+Error, node "n" has no attached graph or digraph
 
 #
 gap> STOP_TEST("graphviz package: node.tst", 0);

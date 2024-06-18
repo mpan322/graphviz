@@ -646,3 +646,51 @@ function(c)
                    TNAM_OBJ(c));
   fi;
 end);
+
+InstallMethod(GraphvizAttachGraphOrDigraph,
+"for a node and graphviz graph or digraph",
+[IsGraphvizNode, IsGraphvizGraphOrDigraph],
+function(node, g)
+    local kind;
+    if GraphvizHasAttachedGraphOrDigraph(node) then
+        if IsGraphvizDigraph(g) then
+           kind := "digraph";
+        elif IsGraphvizGraph(g) then
+           kind := "graph";
+        else
+           kind := "unknown";
+        fi;
+        ErrorFormatted("node \"{}\" already has the {} \"{}\" attached",
+                       GraphvizName(node), kind, GraphvizName(g));
+    fi;
+    node!.Attached := g;
+    return node;
+end);
+
+InstallMethod(GraphvizDetachGraphOrDigraph,
+"for a node",
+[IsGraphvizNode],
+function(node)
+    if not GraphvizHasAttachedGraphOrDigraph(node) then
+        ErrorFormatted("node \"{}\" has no attached graph or digraph",
+                       GraphvizName(node));
+    fi;
+    Unbind(node!.Attached);
+    return node;
+end);
+
+InstallMethod(GraphvizHasAttachedGraphOrDigraph,
+"for a node",
+[IsGraphvizNode],
+node -> node!.Attached <> fail);
+
+InstallMethod(GraphvizGetAttachedGraphOrDigraph,
+"for a node",
+[IsGraphvizNode],
+function(node)
+    if not GraphvizHasAttachedGraphOrDigraph(node) then
+        ErrorFormatted("node \"{}\" has no attached graph or digraph",
+                       GraphvizName(node));
+    fi;
+    return node!.Attached;
+end);
