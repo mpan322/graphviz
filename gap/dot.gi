@@ -664,6 +664,12 @@ function(node, g)
                        GraphvizName(node), kind, GraphvizName(g));
     fi;
     node!.Attached := g;
+    if GV_HasCyclicImageDependency(g) then
+        # TODO give the depencency cycle (eg. a -> b -> c -> a)
+        ErrorFormatted("cannot add graph, ",
+                       "it will create a cyclic image dependency");
+        GraphvizDetachGraphOrDigraph(node);
+    fi;
     return node;
 end);
 
@@ -675,7 +681,7 @@ function(node)
         ErrorFormatted("node \"{}\" has no attached graph or digraph",
                        GraphvizName(node));
     fi;
-    Unbind(node!.Attached);
+    node!.Attached := fail;
     return node;
 end);
 

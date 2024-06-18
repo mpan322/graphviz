@@ -45,9 +45,9 @@ DeclareOperation("GV_MapNames", [GV_IsMap]);
 DeclareOperation("GV_HasNode", [IsGraphvizGraphDigraphOrContext, IsObject]);
 
 DeclareOperation("GV_GetParent", [IsGraphvizGraphDigraphOrContext]);
-DeclareOperation("GV_HasParent", [IsGraphvizGraphDigraphOrContext]);
 DeclareOperation("GV_GraphTreeSearch",
 [IsGraphvizGraphDigraphOrContext, IsFunction]);
+DeclareGlobalFunction("GV_HasCyclicImageDependency");
 DeclareOperation("GV_GraphSearchChildren",
 [IsGraphvizGraphDigraphOrContext, IsFunction]);
 DeclareOperation("GV_FindGraphWithNode",

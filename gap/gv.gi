@@ -284,10 +284,6 @@ InstallMethod(GV_GetParent,
 "for a graphviz graph",
 [IsGraphvizGraphDigraphOrContext], graph -> graph!.Parent);
 
-InstallMethod(GV_HasParent,
-"for a graphviz graph",
-[IsGraphvizGraphDigraphOrContext], graph -> graph!.Parent <> fail);
-
 InstallMethod(GV_GraphTreeSearch,
 "for a graphviz graph and a predicate",
 [IsGraphvizGraphDigraphOrContext, IsFunction],
@@ -369,6 +365,46 @@ function(graph, pred)
   od;
 
   return fail;
+end);
+
+InstallGlobalFunction(GV_HasCyclicImageDependency,
+function(g)
+    local queue, seen, tmp, curr;
+    queue := [g];
+    seen  := [g];
+
+    # if there is a cyclic dep. then a DFS will return back to the graph
+    while Length(queue) > 0 do
+      curr := Remove(queue, 1);
+
+      # add the dependencies of the graph to the queue to be searched
+      tmp := GV_GraphTreeSearch(curr, function(s)
+        local node, map, key, attached;
+        map := GraphvizNodes(s);
+        for key in GV_MapNames(map) do
+          node := map[key];
+          if not GraphvizHasAttachedGraphOrDigraph(node) then
+            continue;
+          fi;
+
+          attached := GraphvizGetAttachedGraphOrDigraph(node);
+          # if we have gotten back to the start graph then error!
+          if IsIdenticalObj(attached, g) then
+            return true;
+          fi;
+          if not ForAny(seen, v -> IsIdenticalObj(v, attached)) then
+            Add(queue, attached);
+            Add(seen, attached);
+          fi;
+        od;
+        return false;
+      end);
+      if tmp <> fail then  # only happens if returned to start graph
+        return true;
+      fi;
+    od;
+
+    return false;
 end);
 
 InstallMethod(GV_FindGraphWithNode,

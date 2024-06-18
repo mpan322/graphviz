@@ -8,7 +8,7 @@
 #############################################################################
 ##
 
-#@local color, g, label, n, s, shape, t
+#@local color, g, label, n, s, shape, t, k
 gap> START_TEST("graphviz package: node.tst");
 gap> LoadPackage("graphviz", false);;
 
@@ -174,6 +174,58 @@ gap> g := GraphvizDigraph();;
 gap> n := GraphvizAddNode(g, "n");;
 gap> GraphvizDetachGraphOrDigraph(n);
 Error, node "n" has no attached graph or digraph
+
+# Test detaching normally succeeds
+gap> g := GraphvizDigraph();;
+gap> n := GraphvizAddNode(g, "n");;
+gap> t := GraphvizGraph("test");;
+gap> GraphvizAttachGraphOrDigraph(n, t);;
+gap> GraphvizDetachGraphOrDigraph(n);
+<graphviz node "n">
+gap> GraphvizHasAttachedGraphOrDigraph(n);
+false
+
+# Test attaching graph to its own node
+gap> g := GraphvizDigraph();;
+gap> n := GraphvizAddNode(g, "n");;
+gap> GraphvizAttachGraphOrDigraph(n, g);
+Error, cannot add graph, it will create a cyclic image dependency
+
+# Test attaching graph with long cycle fails
+gap> g := GraphvizDigraph("a");;
+gap> n := GraphvizAddNode(g, "n");;
+gap> t := GraphvizDigraph("b");;
+gap> GraphvizAttachGraphOrDigraph(n, t);;
+gap> n := GraphvizAddNode(t, "n");;
+gap> t := GraphvizDigraph("d");;
+gap> GraphvizAttachGraphOrDigraph(n, t);;
+gap> n := GraphvizAddNode(t, "n");;
+gap> t := GraphvizDigraph("e");;
+gap> GraphvizAttachGraphOrDigraph(n, t);;
+gap> n := GraphvizAddNode(t, "n");;
+gap> GraphvizAttachGraphOrDigraph(n, g);
+Error, cannot add graph, it will create a cyclic image dependency
+
+# Test cycle through subgraph
+gap> g := GraphvizDigraph("a");;
+gap> s := GraphvizAddSubgraph(g, "s1");;
+gap> n := GraphvizAddNode(s, "n");;
+gap> t := GraphvizDigraph("b");;
+gap> GraphvizAttachGraphOrDigraph(n, t);;
+gap> s := GraphvizAddSubgraph(t, "s2");;
+gap> n := GraphvizAddNode(s, "n");;
+gap> GraphvizAttachGraphOrDigraph(n, g);;
+Error, cannot add graph, it will create a cyclic image dependency
+
+# Test weak cycles are fine
+gap> g := GraphvizDigraph("a");;
+gap> n := GraphvizAddNode(g, "n");;
+gap> k := GraphvizAddNode(g, "k");;
+gap> t := GraphvizDigraph("t");;
+gap> GraphvizAttachGraphOrDigraph(n, t);
+<graphviz node "n">
+gap> GraphvizAttachGraphOrDigraph(k, t);
+<graphviz node "k">
 
 #
 gap> STOP_TEST("graphviz package: node.tst", 0);
