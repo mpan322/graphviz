@@ -531,6 +531,10 @@ BindGlobal("GV_StringifyNodeName",
 function(node)
   local name, old;
 
+  if GraphvizHasAttachedGraphOrDigraph(node) then
+      # TODO render as image and attach to the node
+  fi;
+
   Assert(0, IsGraphvizNode(node));
   name  := GraphvizName(node);
   if (ForAny("- .+", x -> x in name)

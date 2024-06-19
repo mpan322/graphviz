@@ -14,6 +14,10 @@
  - Thoroughly test the ':' syntax more (might have broke when the quotes were changed)
  - PrintObj method is missing for nodes (and probably edges)
 
+## Image Functions
+ - `GraphvizAddGraphNode` -> takes 2 graphs and adds the graph to the to the toher, returning the node. The node will be the same name as the graph, if it already exists then it will error.
+ - `GraphvizAttachDigraph / Graph` -> attach a new digraph to the node, returning the digraph / graph
+
 ## Other
  - relates to deadnaut github issue https://www.mankier.com/1/nauty-dretodot
  - https://users.cecs.anu.edu.au/~bdm/nauty/nug26.pdf
